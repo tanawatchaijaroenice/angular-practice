@@ -1,0 +1,81 @@
+<div class="demo-container">
+    <div class="header">
+        <h2>📊 High-Performance Table</h2>
+        <p>Handling 1,000+ rows with Signals, Sorting, Filtering, and Pagination.</p>
+    </div>
+
+    <div class="table-card glass-panel">
+        <!-- Controls -->
+        <div class="table-controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search products..." [ngModel]="filterQuery()"
+                    (ngModelChange)="filterQuery.set($event)" class="search-input">
+            </div>
+            <div class="meta-info">
+                Showing {{ paginatedProducts().length }} of {{ filteredProducts().length }} items
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th (click)="sort('id')" [class.active]="sortConfig().column === 'id'">
+                            ID <span class="sort-icon">{{ sortConfig().column === 'id' ? (sortConfig().direction ===
+                                'asc' ? '↑' : '↓') : '' }}</span>
+                        </th>
+                        <th (click)="sort('name')" [class.active]="sortConfig().column === 'name'">
+                            Product Name <span class="sort-icon">{{ sortConfig().column === 'name' ?
+                                (sortConfig().direction === 'asc' ? '↑' : '↓') : '' }}</span>
+                        </th>
+                        <th (click)="sort('category')" [class.active]="sortConfig().column === 'category'">
+                            Category <span class="sort-icon">{{ sortConfig().column === 'category' ?
+                                (sortConfig().direction === 'asc' ? '↑' : '↓') : '' }}</span>
+                        </th>
+                        <th (click)="sort('price')" [class.active]="sortConfig().column === 'price'">
+                            Price <span class="sort-icon">{{ sortConfig().column === 'price' ? (sortConfig().direction
+                                === 'asc' ? '↑' : '↓') : '' }}</span>
+                        </th>
+                        <th (click)="sort('stock')" [class.active]="sortConfig().column === 'stock'">
+                            Stock <span class="sort-icon">{{ sortConfig().column === 'stock' ? (sortConfig().direction
+                                === 'asc' ? '↑' : '↓') : '' }}</span>
+                        </th>
+                        <th (click)="sort('status')" [class.active]="sortConfig().column === 'status'">
+                            Status <span class="sort-icon">{{ sortConfig().column === 'status' ? (sortConfig().direction
+                                === 'asc' ? '↑' : '↓') : '' }}</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (product of paginatedProducts(); track product.id) {
+                    <tr class="table-row">
+                        <td>#{{ product.id }}</td>
+                        <td class="font-bold">{{ product.name }}</td>
+                        <td><span class="badge">{{ product.category }}</span></td>
+                        <td class="price">${{ product.price }}</td>
+                        <td>{{ product.stock }} units</td>
+                        <td>
+                            <span class="status-badge" [ngClass]="getStatusClass(product.status)">
+                                {{ product.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="6" class="empty-state">No products found matching "{{ filterQuery() }}"</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button (click)="prevPage()" [disabled]="currentPage() === 1" class="btn-page">Previous</button>
+            <span class="page-info">Page {{ currentPage() }} of {{ totalPages() }}</span>
+            <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" class="btn-page">Next</button>
+        </div>
+    </div>
+</div>
