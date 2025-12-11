@@ -31,6 +31,10 @@ export class TableDemo {
     currentPage = signal(1);
     pageSize = signal(10);
 
+    // Edit State
+    editingRowId = signal<number | null>(null);
+    editForm = signal<Product | null>(null);
+
     // Computed: Filtered Data
     filteredProducts = computed(() => {
         const query = this.filterQuery().toLowerCase();
@@ -67,6 +71,33 @@ export class TableDemo {
     totalPages = computed(() => Math.ceil(this.sortedProducts().length / this.pageSize()));
 
     // Actions
+    startEdit(product: Product) {
+        this.editingRowId.set(product.id);
+        this.editForm.set({ ...product }); // Clone data
+    }
+
+    saveEdit() {
+        const changes = this.editForm();
+        if (!changes) return;
+
+        this.products.update(products =>
+            products.map(p => p.id === changes.id ? changes : p)
+        );
+        this.cancelEdit();
+    }
+
+    cancelEdit() {
+        this.editingRowId.set(null);
+        this.editForm.set(null);
+    }
+
+    updateEditForm(field: keyof Product, value: any) {
+        this.editForm.update(current => {
+            if (!current) return null;
+            return { ...current, [field]: value };
+        });
+    }
+
     sort(column: keyof Product) {
         const current = this.sortConfig();
         if (current.column === column) {

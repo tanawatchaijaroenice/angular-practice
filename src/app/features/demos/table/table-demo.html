@@ -46,25 +46,91 @@
                             Status <span class="sort-icon">{{ sortConfig().column === 'status' ? (sortConfig().direction
                                 === 'asc' ? '↑' : '↓') : '' }}</span>
                         </th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @for (product of paginatedProducts(); track product.id) {
-                    <tr class="table-row">
+                    <tr class="table-row" [class.editing]="editingRowId() === product.id">
                         <td>#{{ product.id }}</td>
-                        <td class="font-bold">{{ product.name }}</td>
-                        <td><span class="badge">{{ product.category }}</span></td>
-                        <td class="price">${{ product.price }}</td>
-                        <td>{{ product.stock }} units</td>
+
+                        <!-- Name -->
                         <td>
+                            @if (editingRowId() === product.id && editForm()) {
+                            <input type="text" [ngModel]="editForm()!.name"
+                                (ngModelChange)="updateEditForm('name', $event)" class="edit-input">
+                            } @else {
+                            <span class="font-bold">{{ product.name }}</span>
+                            }
+                        </td>
+
+                        <!-- Category -->
+                        <td>
+                            @if (editingRowId() === product.id && editForm()) {
+                            <select [ngModel]="editForm()!.category"
+                                (ngModelChange)="updateEditForm('category', $event)" class="edit-input">
+                                <option value="Electronics">Electronics</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Home">Home</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Books">Books</option>
+                            </select>
+                            } @else {
+                            <span class="badge">{{ product.category }}</span>
+                            }
+                        </td>
+
+                        <!-- Price -->
+                        <td>
+                            @if (editingRowId() === product.id && editForm()) {
+                            <input type="number" [ngModel]="editForm()!.price"
+                                (ngModelChange)="updateEditForm('price', $event)" class="edit-input small">
+                            } @else {
+                            <span class="price">${{ product.price }}</span>
+                            }
+                        </td>
+
+                        <!-- Stock -->
+                        <td>
+                            @if (editingRowId() === product.id && editForm()) {
+                            <input type="number" [ngModel]="editForm()!.stock"
+                                (ngModelChange)="updateEditForm('stock', $event)" class="edit-input small">
+                            } @else {
+                            {{ product.stock }} units
+                            }
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                            @if (editingRowId() === product.id && editForm()) {
+                            <select [ngModel]="editForm()!.status" (ngModelChange)="updateEditForm('status', $event)"
+                                class="edit-input">
+                                <option value="In Stock">In Stock</option>
+                                <option value="Low Stock">Low Stock</option>
+                                <option value="Out of Stock">Out of Stock</option>
+                            </select>
+                            } @else {
                             <span class="status-badge" [ngClass]="getStatusClass(product.status)">
                                 {{ product.status }}
                             </span>
+                            }
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                            @if (editingRowId() === product.id) {
+                            <div class="action-buttons">
+                                <button (click)="saveEdit()" class="btn-icon save" title="Save">💾</button>
+                                <button (click)="cancelEdit()" class="btn-icon cancel" title="Cancel">❌</button>
+                            </div>
+                            } @else {
+                            <button (click)="startEdit(product)" class="btn-icon edit" title="Edit">✏️</button>
+                            }
                         </td>
                     </tr>
                     } @empty {
                     <tr>
-                        <td colspan="6" class="empty-state">No products found matching "{{ filterQuery() }}"</td>
+                        <td colspan="7" class="empty-state">No products found matching "{{ filterQuery() }}"</td>
                     </tr>
                     }
                 </tbody>
