@@ -1,0 +1,56 @@
+<div class="demo-container">
+    <div class="header">
+        <h2>🚦 Signals Demo (Refactored)</h2>
+        <p>Using <code>input()</code>, <code>output()</code>, and <code>model()</code> for clean architecture.</p>
+    </div>
+
+    <div class="demo-grid">
+        <!-- Counter Component (Model Signal) -->
+        <!-- Two-way binding using [(count)] -->
+        <app-counter [(count)]="parentCount"></app-counter>
+
+        <!-- Shipping Component (Linked Signal & Output) -->
+        <div class="card glass-panel">
+            <h3>Parent Controls</h3>
+            <div class="form-group">
+                <label>Select Country (Parent State):</label>
+                <select [ngModel]="selectedCountry()" (ngModelChange)="selectedCountry.set($any($event))"
+                    class="form-control">
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                </select>
+            </div>
+        </div>
+
+        <app-shipping [country]="selectedCountry()" (shippingChange)="onShippingChange($event)">
+        </app-shipping>
+
+        <!-- User Component (Resource & Input) -->
+        <div class="card glass-panel">
+            <h3>User Controls</h3>
+            <div class="controls">
+                <button (click)="prevUser()" class="btn btn-secondary">Prev User</button>
+                <button (click)="nextUser()" class="btn">Next User</button>
+            </div>
+        </div>
+
+        <app-user-profile [userId]="currentUserId()"></app-user-profile>
+
+        <!-- Effects Log -->
+        <div class="card glass-panel full-width">
+            <h3>Effects Log</h3>
+            <p>Side effects triggered by signal changes.</p>
+            <div class="logs-container">
+                @for (log of logs(); track $index) {
+                <div class="log-item">
+                    <span class="timestamp">{{ log.time }}</span>
+                    <span class="message">{{ log.message }}</span>
+                </div>
+                } @empty {
+                <div class="empty-state">No logs yet. Interact with the components!</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

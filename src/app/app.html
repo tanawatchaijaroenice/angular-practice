@@ -1,0 +1,32 @@
+<div class="app-container">
+  <header class="glass-panel">
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">NG</span>
+        <span class="logo-text">Showcase</span>
+      </div>
+      
+      <nav>
+        <ul>
+          <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+          <li><a routerLink="/demos/signals" routerLinkActive="active">Signals</a></li>
+          <li><a routerLink="/demos/control-flow" routerLinkActive="active">Control Flow</a></li>
+        </ul>
+      </nav>
+      
+      <div class="actions">
+        <a href="https://angular.dev" target="_blank" class="github-link">Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Built with Angular 21 • <span class="heart">♥</span> by Antigravity</p>
+    </div>
+  </footer>
+</div>

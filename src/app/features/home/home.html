@@ -1,0 +1,38 @@
+<div class="home-container">
+    <section class="hero">
+        <h1>Modern Angular</h1>
+        <p class="subtitle">Explore the latest features of Angular 21 including Signals, Control Flow, and more.</p>
+        <div class="cta-group">
+            <a routerLink="/demos/signals" class="btn">Try Signals</a>
+            <a routerLink="/demos/control-flow" class="btn btn-secondary">Explore Syntax</a>
+        </div>
+    </section>
+
+    <section class="features-grid">
+        <div class="card glass-panel">
+            <h3>⚡ Signals</h3>
+            <p>Granular reactivity system that updates only what changes. No more Zone.js overhead.</p>
+            <div class="code-preview">
+                <code>count = signal(0);</code>
+            </div>
+        </div>
+
+        <div class="card glass-panel">
+            <h3>🎛️ Control Flow</h3>
+            <p>New built-in syntax for conditional logic and loops. Faster and more readable.</p>
+            <div class="code-preview">
+                <code>&#64;if (loggedIn) {{ '{' }} ... {{ '}' }}</code>
+            </div>
+        </div>
+
+        <div class="card glass-panel">
+            <h3>🚀 Zoneless</h3>
+            <p>Optional Zone.js for maximum performance and smaller bundles.</p>
+        </div>
+
+        <div class="card glass-panel">
+            <h3>📦 Standalone</h3>
+            <p>Components are standalone by default. No more NgModules boilerplate.</p>
+        </div>
+    </section>
+</div>

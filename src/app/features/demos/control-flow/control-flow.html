@@ -1,0 +1,210 @@
+<div class="demo-container">
+    <div class="header">
+        <h2>🎛️ Control Flow</h2>
+        <p>Built-in control flow syntax for better performance and readability.</p>
+    </div>
+
+    <div class="demo-grid">
+        <!-- @if Demo -->
+        <div class="card glass-panel">
+            <h3>&#64;if / &#64;else</h3>
+            <div class="controls">
+                <label class="toggle">
+                    <input type="checkbox" [checked]="isVisible()" (change)="toggleVisibility()">
+                    <span class="slider"></span>
+                    <span class="label-text">Show Content</span>
+                </label>
+            </div>
+
+            <div class="content-area">
+                @if (isVisible()) {
+                <div class="box visible">
+                    <span>I am visible!</span>
+                </div>
+                } @else {
+                <div class="box hidden">
+                    <span>Hidden (Placeholder)</span>
+                </div>
+                }
+            </div>
+
+            <div class="code-snippet">
+                <code>&#64;if (visible) {{ '{' }} ... {{ '}' }} &#64;else {{ '{' }} ... {{ '}' }}</code>
+            </div>
+        </div>
+
+        <!-- @switch Demo -->
+        <div class="card glass-panel">
+            <h3>&#64;switch</h3>
+            <div class="controls">
+                <button (click)="setRole('admin')" [class.active]="role() === 'admin'" class="btn btn-sm">Admin</button>
+                <button (click)="setRole('user')" [class.active]="role() === 'user'" class="btn btn-sm">User</button>
+                <button (click)="setRole('guest')" [class.active]="role() === 'guest'" class="btn btn-sm">Guest</button>
+            </div>
+
+            <div class="content-area">
+                @switch (role()) {
+                @case ('admin') {
+                <div class="role-badge admin">🛡️ Admin Access</div>
+                }
+                @case ('user') {
+                <div class="role-badge user">👤 User Dashboard</div>
+                }
+                @default {
+                <div class="role-badge guest">❓ Guest View</div>
+                }
+                }
+            </div>
+
+            <div class="code-snippet">
+                <code>&#64;switch (role) {{ '{' }} &#64;case ('admin') ... {{ '}' }}</code>
+            </div>
+        </div>
+
+        <!-- @for Demo -->
+        <div class="card glass-panel full-width">
+            <h3>&#64;for Loop</h3>
+            <div class="controls">
+                <button (click)="addUser()" class="btn">Add User</button>
+                <button (click)="shuffle()" class="btn btn-secondary">Shuffle</button>
+            </div>
+
+            <div class="list-container">
+                @for (user of users(); track user.id) {
+                <div class="list-item">
+                    <div class="avatar" [style.background-color]="user.color">{{ user.name.charAt(0) }}</div>
+                    <div class="info">
+                        <span class="name">{{ user.name }}</span>
+                        <span class="id">ID: {{ user.id }}</span>
+                    </div>
+                    <button (click)="removeUser(user.id)" class="btn-icon">×</button>
+                </div>
+                } @empty {
+                <div class="empty-state">No users found. Add some!</div>
+                }
+            </div>
+
+            <div class="code-snippet">
+                <code>&#64;for (user of users; track user.id) {{ '{' }} ... {{ '}' }}</code>
+            </div>
+        </div>
+
+        <!-- @defer Demo -->
+        <div class="card glass-panel full-width">
+            <h3>&#64;defer (Deferrable Views)</h3>
+            <p>Lazy loading content based on triggers.</p>
+
+            <div class="defer-grid">
+                <!-- On Viewport -->
+                <div class="defer-item">
+                    <h4>On Viewport</h4>
+                    <p>Scroll down to load!</p>
+                    @defer (on viewport) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>⬇️ Scroll to load me</span>
+                    </div>
+                    } @loading {
+                    <div class="loading-box">Loading...</div>
+                    }
+                </div>
+
+                <!-- On Interaction -->
+                <div class="defer-item">
+                    <h4>On Interaction</h4>
+                    <p>Click the button to load.</p>
+                    <button #trigger class="btn btn-sm">Load Chart</button>
+
+                    @defer (on interaction(trigger)) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>Waiting for click...</span>
+                    </div>
+                    } @loading (minimum 1s) {
+                    <div class="loading-box">Loading...</div>
+                    }
+                </div>
+
+                <!-- On Timer -->
+                <div class="defer-item">
+                    <h4>On Timer (5s)</h4>
+                    <p>Loads automatically after 5s.</p>
+                    @defer (on timer(5s)) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>⏳ Waiting 5s...</span>
+                    </div>
+                    }
+                </div>
+
+                <!-- On Idle -->
+                <div class="defer-item">
+                    <h4>On Idle (Default)</h4>
+                    <p>Loads when browser is idle.</p>
+                    @defer (on idle) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>Waiting for idle...</span>
+                    </div>
+                    }
+                </div>
+
+                <!-- On Hover -->
+                <div class="defer-item">
+                    <h4>On Hover</h4>
+                    <p>Hover over the area below.</p>
+                    <div #hoverArea class="hover-area">Hover Me!</div>
+
+                    @defer (on hover(hoverArea)) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>Hover the button above</span>
+                    </div>
+                    }
+                </div>
+
+                <!-- On Immediate -->
+                <div class="defer-item">
+                    <h4>On Immediate</h4>
+                    <p>Loads immediately (non-blocking).</p>
+                    @defer (on immediate) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>Loading immediately...</span>
+                    </div>
+                    }
+                </div>
+
+                <!-- When Condition -->
+                <div class="defer-item">
+                    <h4>When (Condition)</h4>
+                    <p>Loads when condition is true.</p>
+                    <label class="toggle">
+                        <input type="checkbox" [checked]="showDeferWhen()"
+                            (change)="showDeferWhen.set(!showDeferWhen())">
+                        <span class="slider"></span>
+                        <span class="label-text">Load Chart</span>
+                    </label>
+
+                    @defer (when showDeferWhen()) {
+                    <app-heavy-chart></app-heavy-chart>
+                    } @placeholder {
+                    <div class="placeholder-box">
+                        <span>Waiting for toggle...</span>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="code-snippet">
+                <code>&#64;defer (on viewport) {{ '{' }} ... {{ '}' }} &#64;placeholder {{ '{' }} ... {{ '}' }}</code>
+            </div>
+        </div>
+    </div>
+</div>
